@@ -1,0 +1,27 @@
+{
+  "name": "joi-doc-gen",
+  "version": "0.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobworrel/joi-doc-gen.git"
+  },
+  "author": "Jacob Worrel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacobworrel/joi-doc-gen/issues"
+  },
+  "homepage": "https://github.com/jacobworrel/joi-doc-gen#readme",
+  "dependencies": {
+    "json2md": "^1.6.5",
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "@hapi/joi": "^16.1.7"
+  }
+}
