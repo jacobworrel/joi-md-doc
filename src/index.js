@@ -67,28 +67,42 @@ const makeObjectField = (val, key) => {
   ];
 };
 
-function parseSchema(schema, path = []) {
-  const name = findMeta('name')(schema);
-  const filename = findMeta('filename')(schema);
+function makeMarkdownByFilename(root) {
+  const markdownByFilename = {};
 
-  const json = R.pipe(
-    R.prop('keys'),
-    R.mapObjIndexed((val, key) => {
-      if (isPrimitive(val)) {
-        return makePrimitiveField(val, key);
-      } else {
-        parseSchema(val, R.append(filename, path));
-        return makeObjectField(val, key);
-      }
-    }),
-    R.values,
-    R.prepend(mdu.makeSchemaTitle(name)),
-    R.when(() => R.not(R.isEmpty(path)), R.prepend(mdu.makeFilePathLink(path))),
-  )(schema);
+  function makeMarkdownWith(schema, path = []) {
+    const name = findMeta('name')(schema);
+    const filename = findMeta('filename')(schema);
 
-  const markdown = json2md(json);
-  writeFileAsync(pathTo(`./../dist/${filename}.md`), markdown, 'utf-8');
+    const json = R.pipe(
+      R.prop('keys'),
+      R.mapObjIndexed((val, key) => {
+        if (isPrimitive(val)) {
+          return makePrimitiveField(val, key);
+        } else {
+          makeMarkdownWith(val, R.append(filename, path));
+          return makeObjectField(val, key);
+        }
+      }),
+      R.values,
+      R.prepend(mdu.makeSchemaTitle(name)),
+      R.when(
+        () => R.not(R.isEmpty(path)),
+        R.prepend(mdu.makeFilePathLink(path)),
+      ),
+    )(schema);
+
+    markdownByFilename[filename] = json2md(json);
+  }
+
+  makeMarkdownWith(root);
+
+  return markdownByFilename;
 }
 
 const root = rootSchema.describe();
-parseSchema(root);
+const markdownByFilename = makeMarkdownByFilename(root);
+
+R.forEachObjIndexed((markdown, filename) =>
+  writeFileAsync(pathTo(`./../dist/${filename}.md`), markdown, 'utf-8'),
+)(markdownByFilename);
