@@ -4,60 +4,41 @@ const rootSchema = require('./../rootSchema');
 const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
+const mdu = require('./markdownUtil');
 
 const pathTo = R.partial(path.join, [__dirname]);
 const writeFileAsync = promisify(fs.writeFile);
 
 const primitiveList = ['string', 'number', 'boolean'];
 
-const findMeta = x => R.pipe(
-  R.prop('metas'),
-  R.defaultTo([]),
-  R.find(R.has(x)),
-  R.defaultTo({}),
-  R.prop(x)
-);
-
-const makeSchemaTitle = R.objOf('h1');
-const makeKeyTitle = R.objOf('h2');
-const makeDescription = R.objOf('p');
-const wrapInBackticks = x => `\`${x}\``;
+const findMeta = x =>
+  R.pipe(
+    R.prop('metas'),
+    R.defaultTo([]),
+    R.find(R.has(x)),
+    R.defaultTo({}),
+    R.prop(x),
+  );
 
 const makeTypeDef = R.pipe(
   R.reject(R.either(R.isEmpty, R.isNil)),
   R.join(' | '),
-  R.objOf('blockquote')
+  R.objOf('blockquote'),
 );
-const makeType = x => wrapInBackticks(x);
-const makeRequiredOrOptional = isRequired => `${isRequired ? 'Required' : 'Optional'}`;
+const makeType = x => mdu.wrapInBackticks(x);
+const makeRequiredOrOptional = isRequired =>
+  `${isRequired ? 'Required' : 'Optional'}`;
 const makeDefault = R.when(
   R.complement(R.isNil),
-  R.pipe(
-    wrapInBackticks,
-    R.concat('Default: ')
-  )
-);
-const makeFileLink = filename => `[${filename}](./${filename}.md)`;
-const makeFilePathLink = R.pipe(
-  R.map(makeFileLink),
-  R.join(' / ')
+  R.pipe(mdu.wrapInBackticks, R.concat('Default: ')),
 );
 
-const isPrimitive = R.pipe(
-  R.prop('type'),
-  R.includes(R.__, primitiveList)
-);
+const isPrimitive = R.pipe(R.prop('type'), R.includes(R.__, primitiveList));
 
 // PRIMITIVE TYPES
-const makePrimitiveTitle = x => makeKeyTitle(x);
+const makePrimitiveTitle = x => mdu.makeKeyTitle(x);
 const makePrimitiveField = (val, key) => {
-  const {
-    type,
-    flags: {
-      presence = 'optional',
-      description = '',
-    } = {},
-  } = val;
+  const { type, flags: { presence = 'optional', description = '' } = {} } = val;
   const isRequired = R.equals(presence, 'required');
   const defaultVal = findMeta('default')(val);
   return [
@@ -67,35 +48,26 @@ const makePrimitiveField = (val, key) => {
       makeRequiredOrOptional(isRequired),
       makeDefault(defaultVal),
     ]),
-    makeDescription(description),
-  ]
+    mdu.makeDescription(description),
+  ];
 };
 
 // OBJECT TYPES
 const makeObjectTitle = R.pipe(
   key => `[${key}](./${key}.md)`,
-  makeKeyTitle
+  mdu.makeKeyTitle,
 );
 const makeObjectField = (val, key) => {
-  const {
-    type,
-    flags: {
-      presence = 'optional',
-      description = '',
-    } = {},
-  } = val;
+  const { type, flags: { presence = 'optional', description = '' } = {} } = val;
   const isRequired = R.equals(presence, 'required');
   return [
     makeObjectTitle(key),
-    makeTypeDef([
-      makeType(type),
-      makeRequiredOrOptional(isRequired),
-    ]),
-    makeDescription(description),
-  ]
+    makeTypeDef([makeType(type), makeRequiredOrOptional(isRequired)]),
+    mdu.makeDescription(description),
+  ];
 };
 
-function parseSchema (schema, path = []) {
+function parseSchema(schema, path = []) {
   const name = findMeta('name')(schema);
   const filename = findMeta('filename')(schema);
 
@@ -104,18 +76,14 @@ function parseSchema (schema, path = []) {
     R.mapObjIndexed((val, key) => {
       if (isPrimitive(val)) {
         return makePrimitiveField(val, key);
-      }
-      else {
-        parseSchema(val,  R.append(filename, path));
-        return makeObjectField(val, key)
+      } else {
+        parseSchema(val, R.append(filename, path));
+        return makeObjectField(val, key);
       }
     }),
     R.values,
-    R.prepend(makeSchemaTitle(name)),
-    R.when(
-      () => R.not(R.isEmpty(path)),
-      R.prepend(makeFilePathLink(path))
-    )
+    R.prepend(mdu.makeSchemaTitle(name)),
+    R.when(() => R.not(R.isEmpty(path)), R.prepend(mdu.makeFilePathLink(path))),
   )(schema);
 
   const markdown = json2md(json);
