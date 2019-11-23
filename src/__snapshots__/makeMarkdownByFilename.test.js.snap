@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`makeMarkdownByFilename should match snapshot 1`] = `
+exports[`makeMarkdownByFilename integration should match snapshot 1`] = `
 Object {
   "level1Schema": "[rootSchema](./rootSchema.md)
 # Level 1 Schema
@@ -62,6 +62,34 @@ Follows semantic versioning.
 ## [level1Schema](./level1Schema.md)
 
 > \`object\` | Optional
+
+
+
+",
+}
+`;
+
+exports[`makeMarkdownByFilename unit should support primitive type 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`number\` | Optional
+
+
+
+
+## bar
+
+> \`string\` | Optional
+
+
+
+
+## baz
+
+> \`boolean\` | Optional
 
 
 
