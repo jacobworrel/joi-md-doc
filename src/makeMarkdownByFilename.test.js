@@ -1,4 +1,4 @@
-const makeMarkdownByFilename = require('./index');
+const makeMarkdownByFilename = require('./makeMarkdownByFilename');
 const rootSchema = require('./../rootSchema');
 
 describe(`makeMarkdownByFilename`, () => {
