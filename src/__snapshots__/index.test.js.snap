@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`makeMarkdownByFilename should match snapshot 1`] = `
+Object {
+  "level1Schema": "[rootSchema](./rootSchema.md)
+# Level 1 Schema
+
+## foo
+
+> \`string\` | Optional
+
+
+
+
+## bar
+
+> \`string\` | Optional
+
+
+
+
+## [level2Schema](./level2Schema.md)
+
+> \`object\` | Optional
+
+
+
+",
+  "level2Schema": "[rootSchema](./rootSchema.md) / [level1Schema](./level1Schema.md)
+# Level 2 Schema
+
+## baz
+
+> \`string\` | Optional
+
+
+
+",
+  "rootSchema": "# Root Schema
+
+## version
+
+> \`number\` | Optional | Default: \`1.0.0\`
+
+
+Follows semantic versioning.
+
+## group
+
+> \`number\` | Required
+
+
+
+
+## type
+
+> \`string\` | Required
+
+
+
+
+## [level1Schema](./level1Schema.md)
+
+> \`object\` | Optional
+
+
+
+",
+}
+`;

@@ -48,3 +48,5 @@ const markdownByFilename = makeMarkdownByFilename(rootSchema);
 R.forEachObjIndexed((markdown, filename) =>
   writeFileAsync(pathTo(`./../dist/${filename}.md`), markdown, 'utf-8'),
 )(markdownByFilename);
+
+module.exports = makeMarkdownByFilename;
