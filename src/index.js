@@ -37,7 +37,11 @@ const makeDefault = R.when(
     R.concat('Default: ')
   )
 );
-const makeParentFilenameLink = parentFilename => `[Back to Parent Schema](./${parentFilename}.md)`;
+const makeFileLink = filename => `[${filename}](./${filename}.md)`;
+const makeFilePathLink = R.pipe(
+  R.map(makeFileLink),
+  R.join(' / ')
+);
 
 const isPrimitive = R.pipe(
   R.prop('type'),
@@ -91,7 +95,7 @@ const makeObjectField = (val, key) => {
   ]
 };
 
-function parseSchema (schema, parentFilename) {
+function parseSchema (schema, path = []) {
   const name = findMeta('name')(schema);
   const filename = findMeta('filename')(schema);
 
@@ -102,15 +106,15 @@ function parseSchema (schema, parentFilename) {
         return makePrimitiveField(val, key);
       }
       else {
-        parseSchema(val, filename);
+        parseSchema(val,  R.append(filename, path));
         return makeObjectField(val, key)
       }
     }),
     R.values,
     R.prepend(makeSchemaTitle(name)),
     R.when(
-      () => R.not(R.isNil(parentFilename)),
-      R.prepend(makeParentFilenameLink(parentFilename))
+      () => R.not(R.isEmpty(path)),
+      R.prepend(makeFilePathLink(path))
     )
   )(schema);
 
