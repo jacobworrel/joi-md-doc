@@ -69,6 +69,20 @@ Follows semantic versioning.
 }
 `;
 
+exports[`makeMarkdownByFilename unit should mark required fields 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`number\` | Required
+
+
+
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support nested schemas/objects 1`] = `
 Object {
   "child": "[parent](./parent.md)
