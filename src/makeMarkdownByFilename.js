@@ -13,43 +13,28 @@ function makeMarkdownByFilename(rootSchema) {
 
     const json = R.pipe(
       R.prop('keys'),
-      R.mapObjIndexed((val, key) => {
-        if (ju.isPrimitive(val)) {
-          return ju.makePrimitiveField(val, key);
-        } else if (ju.isObject(val)) {
-          makeMarkdownWith(nextPath, val);
-          return ju.makeObjectField(val, key);
-        } else if (ju.isArray(val)) {
-          const {
-            type,
-            items,
-            flags: { presence = 'optional', description = '' } = {},
-          } = val;
-          const typeList = R.pipe(
-            R.map(
-              R.ifElse(
-                ju.isPrimitive,
-                R.pipe(R.prop('type'), mdu.wrapInBackticks),
-                R.pipe(R.tap(makeMarkdownWith(nextPath)), x =>
-                  mdu.makeLink({
-                    name: ju.findMeta('name')(x),
-                    filename: ju.findMeta('filename')(x),
-                  }),
+      R.mapObjIndexed((val, key) =>
+        R.cond([
+          [ju.isPrimitive, ju.makePrimitiveField(key)],
+          [
+            ju.isObject,
+            R.pipe(R.tap(makeMarkdownWith(nextPath)), ju.makeObjectField(key)),
+          ],
+          [
+            ju.isArray,
+            R.pipe(
+              R.tap(
+                R.pipe(
+                  R.propOr([], 'items'),
+                  R.forEach(R.when(ju.isObject, makeMarkdownWith(nextPath))),
                 ),
               ),
+              ju.makeArrayField(key),
             ),
-          )(items);
-          const isRequired = R.equals(presence, 'required');
-          return [
-            mdu.makeKeyTitle(key),
-            ju.makeTypeDef([
-              `${ju.makeType(type)}: ${typeList}`,
-              ju.makeRequiredOrOptional(isRequired),
-            ]),
-            mdu.makeDescription(description),
-          ];
-        }
-      }),
+          ],
+          [R.T, R.identity],
+        ])(val),
+      ),
       R.values,
       R.prepend(mdu.makeSchemaTitle(name)),
       R.when(

@@ -31,7 +31,7 @@ ju.isObject = R.pipe(R.prop('type'), R.equals('object'));
 ju.isArray = R.pipe(R.prop('type'), R.equals('array'));
 
 // PRIMITIVE TYPES
-ju.makePrimitiveField = (val, key) => {
+ju.makePrimitiveField = R.curry((key, val) => {
   const { type, flags: { presence = 'optional', description = '' } = {} } = val;
   const isRequired = R.equals(presence, 'required');
   const defaultVal = ju.findMeta('default')(val);
@@ -44,10 +44,10 @@ ju.makePrimitiveField = (val, key) => {
     ]),
     mdu.makeDescription(description),
   ];
-};
+});
 
 // OBJECT TYPES
-ju.makeObjectField = (val, key) => {
+ju.makeObjectField = R.curry((key, val) => {
   const { type, flags: { presence = 'optional', description = '' } = {} } = val;
   const isRequired = R.equals(presence, 'required');
   const filename = ju.findMeta('filename')(val);
@@ -56,16 +56,30 @@ ju.makeObjectField = (val, key) => {
     ju.makeTypeDef([ju.makeType(type), ju.makeRequiredOrOptional(isRequired)]),
     mdu.makeDescription(description),
   ];
-};
+});
 
 // ARRAY TYPES
-ju.makeArrayField = (val, key) => {
+ju.makeArrayField = R.curry((key, val) => {
   const {
     type,
     items,
     flags: { presence = 'optional', description = '' } = {},
   } = val;
-  const typeList = R.pipe(R.pluck('type'), R.map(mdu.wrapInBackticks))(items);
+
+  const typeList = R.pipe(
+    R.map(
+      R.ifElse(
+        ju.isPrimitive,
+        R.pipe(R.prop('type'), mdu.wrapInBackticks),
+        R.pipe(x =>
+          mdu.makeLink({
+            name: ju.findMeta('name')(x),
+            filename: ju.findMeta('filename')(x),
+          }),
+        ),
+      ),
+    ),
+  )(items);
   const isRequired = R.equals(presence, 'required');
   return [
     mdu.makeKeyTitle(key),
@@ -75,6 +89,6 @@ ju.makeArrayField = (val, key) => {
     ]),
     mdu.makeDescription(description),
   ];
-};
+});
 
 module.exports = ju;

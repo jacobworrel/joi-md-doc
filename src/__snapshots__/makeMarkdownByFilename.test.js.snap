@@ -42,6 +42,58 @@ This is a description.
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support list of single primitive type 1`] = `
+Object {
+  "test": "# Test
+
+## stringList
+
+> \`array\`: \`string\` | Optional
+
+
+
+",
+}
+`;
+
+exports[`makeMarkdownByFilename unit should support list of various primitive types 1`] = `
+Object {
+  "test": "# Test
+
+## stringList
+
+> \`array\`: \`string\`,\`number\`,\`boolean\` | Optional
+
+
+
+",
+}
+`;
+
+exports[`makeMarkdownByFilename unit should support nested list of single schema/object type 1`] = `
+Object {
+  "listItem": "[Test](./test.md)
+# List Item
+
+## listItemKey
+
+> \`string\` | Optional
+
+
+
+",
+  "test": "# Test
+
+## stringList
+
+> \`array\`: [List Item](./listItem.md) | Optional
+
+
+
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support nested schemas/objects 1`] = `
 Object {
   "child": "[Parent](./parent.md)
