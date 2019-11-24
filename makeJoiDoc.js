@@ -8,7 +8,7 @@ const { promisify } = require('util');
 const pathTo = R.partial(path.join, [__dirname]);
 const writeFileAsync = promisify(fs.writeFile);
 
-console.log(rootSchema.describe());
+console.log(JSON.stringify(rootSchema.describe(), null, 2));
 
 R.pipe(
   makeMarkdownByFilename,

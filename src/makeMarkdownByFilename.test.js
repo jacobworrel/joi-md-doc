@@ -54,6 +54,24 @@ describe(`makeMarkdownByFilename`, () => {
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
+
+    it(`should support descriptions`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'number',
+              flags: {
+                description: 'This is a description.',
+              },
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
   });
 
   describe(`integration`, () => {
