@@ -69,6 +69,30 @@ Follows semantic versioning.
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support nested schemas/objects 1`] = `
+Object {
+  "child": "[parent](./parent.md)
+# Child
+
+## foo
+
+> \`number\` | Optional
+
+
+
+",
+  "parent": "# Parent
+
+## [foo](./foo.md)
+
+> \`object\` | Optional
+
+
+
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support primitive type 1`] = `
 Object {
   "test": "# Test

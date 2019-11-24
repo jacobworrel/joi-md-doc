@@ -17,6 +17,25 @@ describe(`makeMarkdownByFilename`, () => {
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
+
+    it(`should support nested schemas/objects`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Parent', filename: 'parent' }],
+          keys: {
+            foo: {
+              type: 'object',
+              metas: [{ name: 'Child', filename: 'child' }],
+              keys: {
+                foo: { type: 'number' },
+              },
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
   });
 
   describe(`integration`, () => {
