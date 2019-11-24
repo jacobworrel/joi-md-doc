@@ -83,6 +83,20 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support default meta tags 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`number\` | Optional | Default: \`1\`
+
+
+
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support descriptions 1`] = `
 Object {
   "test": "# Test

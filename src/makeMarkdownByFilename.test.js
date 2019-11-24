@@ -72,6 +72,22 @@ describe(`makeMarkdownByFilename`, () => {
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
+
+    it(`should support default meta tags`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'number',
+              metas: [{ default: 1 }],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
   });
 
   describe(`integration`, () => {
