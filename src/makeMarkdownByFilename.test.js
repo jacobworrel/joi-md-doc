@@ -1,5 +1,4 @@
 const makeMarkdownByFilename = require('./makeMarkdownByFilename');
-const rootSchema = require('./../rootSchema');
 
 describe(`makeMarkdownByFilename`, () => {
   describe(`unit`, () => {
@@ -87,12 +86,6 @@ describe(`makeMarkdownByFilename`, () => {
       };
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
-    });
-  });
-
-  describe(`integration`, () => {
-    it(`should match snapshot`, () => {
-      expect(makeMarkdownByFilename(rootSchema)).toMatchSnapshot();
     });
   });
 });

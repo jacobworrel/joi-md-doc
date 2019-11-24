@@ -1,5 +1,15 @@
 const joi = require('@hapi/joi');
 
+const listItem = joi
+  .object()
+  .keys({
+    quux: joi.string(),
+  })
+  .meta({
+    name: 'List Item',
+    filename: 'listItemSchema',
+  });
+
 module.exports = joi
   .object()
   .keys({
@@ -9,6 +19,8 @@ module.exports = joi
       .description('Follows semantic versioning.'),
     group: joi.number().required(),
     type: joi.string().required(),
+    primitiveList: joi.array().items(joi.string(), joi.number(), joi.boolean()),
+    objectList: joi.array().items(listItem),
     level1Schema: joi
       .object()
       .keys({

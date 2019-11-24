@@ -1,12 +1,12 @@
 const R = require('ramda');
 
-module.exports = {
-  makeDescription: R.objOf('p'),
-  makeFilePathLink: R.pipe(
-    R.map(filename => `[${filename}](./${filename}.md)`),
-    R.join(' / '),
-  ),
-  makeKeyTitle: R.objOf('h2'),
-  makeSchemaTitle: R.objOf('h1'),
-  wrapInBackticks: x => `\`${x}\``,
-};
+const mu = {};
+
+mu.makeDescription = R.objOf('p');
+mu.makeLink = ({ name, filename }) => `[${name}](./${filename}.md)`;
+mu.makeFilePathLink = R.pipe(R.map(mu.makeLink), R.join(' / '));
+mu.makeKeyTitle = R.objOf('h2');
+mu.makeSchemaTitle = R.objOf('h1');
+mu.wrapInBackticks = x => `\`${x}\``;
+
+module.exports = mu;

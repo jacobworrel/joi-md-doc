@@ -1,74 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`makeMarkdownByFilename integration should match snapshot 1`] = `
-Object {
-  "level1Schema": "[rootSchema](./rootSchema.md)
-# Level 1 Schema
-
-## foo
-
-> \`string\` | Optional
-
-
-
-
-## bar
-
-> \`string\` | Optional
-
-
-
-
-## [level2Schema](./level2Schema.md)
-
-> \`object\` | Optional
-
-
-
-",
-  "level2Schema": "[rootSchema](./rootSchema.md) / [level1Schema](./level1Schema.md)
-# Level 2 Schema
-
-## baz
-
-> \`string\` | Optional
-
-
-
-",
-  "rootSchema": "# Root Schema
-
-## version
-
-> \`number\` | Optional | Default: \`1.0.0\`
-
-
-Follows semantic versioning.
-
-## group
-
-> \`number\` | Required
-
-
-
-
-## type
-
-> \`string\` | Required
-
-
-
-
-## [level1Schema](./level1Schema.md)
-
-> \`object\` | Optional
-
-
-
-",
-}
-`;
-
 exports[`makeMarkdownByFilename unit should mark required fields 1`] = `
 Object {
   "test": "# Test
@@ -113,7 +44,7 @@ This is a description.
 
 exports[`makeMarkdownByFilename unit should support nested schemas/objects 1`] = `
 Object {
-  "child": "[parent](./parent.md)
+  "child": "[Parent](./parent.md)
 # Child
 
 ## foo
@@ -125,7 +56,7 @@ Object {
 ",
   "parent": "# Parent
 
-## [foo](./foo.md)
+## [foo](./child.md)
 
 > \`object\` | Optional
 
