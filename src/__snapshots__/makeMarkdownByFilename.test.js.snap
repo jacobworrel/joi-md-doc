@@ -35,6 +35,23 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support blacklisting invalid values 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`string\` | Optional
+
+
+
+
+
+Blacklist: \`invalid1\`, \`invalid2\`
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support default meta tags 1`] = `
 Object {
   "test": "# Test
@@ -163,6 +180,23 @@ Object {
 
 
 
+",
+}
+`;
+
+exports[`makeMarkdownByFilename unit should support whitelisting valid values 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`string\` | Optional
+
+
+
+
+
+Whitelist: \`valid1\`, \`valid2\`
 ",
 }
 `;

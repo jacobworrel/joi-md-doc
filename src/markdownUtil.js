@@ -2,7 +2,7 @@ const R = require('ramda');
 
 const mu = {};
 
-mu.makeDescription = R.objOf('p');
+mu.makeParagraph = R.objOf('p');
 mu.makeLink = ({ name, filename }) => `[${name}](./${filename}.md)`;
 mu.makeFilePathLink = R.pipe(R.map(mu.makeLink), R.join(' / '));
 mu.makeKeyTitle = R.objOf('h2');

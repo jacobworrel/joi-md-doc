@@ -2,6 +2,8 @@ const R = require('ramda');
 const mdu = require('./markdownUtil');
 const primitiveList = ['string', 'number', 'boolean'];
 
+const maxValueListLength = 5;
+
 const ju = {};
 
 ju.throwWhenNil = msg =>
@@ -38,20 +40,40 @@ ju.isPrimitive = R.pipe(R.prop('type'), R.includes(R.__, primitiveList));
 ju.isObject = R.pipe(R.prop('type'), R.equals('object'));
 ju.isArray = R.pipe(R.prop('type'), R.equals('array'));
 
+ju.shouldHaveValueList = R.both(
+  R.pipe(R.length, R.lte(R.__, maxValueListLength)),
+  R.complement(R.isEmpty),
+);
+ju.makeValueList = R.pipe(R.map(mdu.wrapInBackticks), R.join(', '));
+
 // PRIMITIVE TYPES
 ju.makePrimitiveField = R.curry((key, val) => {
-  const { type, flags: { presence = 'optional', description = '' } = {} } = val;
+  const {
+    type,
+    allow = [],
+    invalid = [],
+    flags: { presence = 'optional', description = '' } = {},
+  } = val;
   const isRequired = R.equals(presence, 'required');
   const defaultVal = ju.findMeta('default')(val);
-  return [
+  return R.pipe(
+    R.when(
+      () => ju.shouldHaveValueList(allow),
+      R.append(mdu.makeParagraph(`Whitelist: ${ju.makeValueList(allow)}`)),
+    ),
+    R.when(
+      () => ju.shouldHaveValueList(invalid),
+      R.append(mdu.makeParagraph(`Blacklist: ${ju.makeValueList(invalid)}`)),
+    ),
+  )([
     mdu.makeKeyTitle(key),
     ju.makeTypeDef([
       ju.makeType(type),
       ju.makeRequiredOrOptional(isRequired),
       ju.makeDefault(defaultVal),
     ]),
-    mdu.makeDescription(description),
-  ];
+    mdu.makeParagraph(description),
+  ]);
 });
 
 // OBJECT TYPES
@@ -62,7 +84,7 @@ ju.makeObjectField = R.curry((key, val) => {
   return [
     R.pipe(mdu.makeLink, mdu.makeKeyTitle)({ name: key, filename }),
     ju.makeTypeDef([ju.makeType(type), ju.makeRequiredOrOptional(isRequired)]),
-    mdu.makeDescription(description),
+    mdu.makeParagraph(description),
   ];
 });
 
@@ -95,7 +117,7 @@ ju.makeArrayField = R.curry((key, val) => {
       `${ju.makeType(type)}: ${typeList}`,
       ju.makeRequiredOrOptional(isRequired),
     ]),
-    mdu.makeDescription(description),
+    mdu.makeParagraph(description),
   ];
 });
 

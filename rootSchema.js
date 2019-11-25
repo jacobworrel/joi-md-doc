@@ -1,4 +1,5 @@
 const joi = require('@hapi/joi');
+const R = require('ramda');
 
 const listItem = joi
   .object()
@@ -18,7 +19,13 @@ module.exports = joi
       .meta({ default: '1.0.0' })
       .description('Follows semantic versioning.'),
     group: joi.number().required(),
-    type: joi.string().required(),
+    type: joi
+      .string()
+      .required()
+      .valid(...R.map(R.pipe(R.toString, R.concat('valid')), R.range(0, 4)))
+      .invalid(
+        ...R.map(R.pipe(R.toString, R.concat('invalid')), R.range(0, 4)),
+      ),
     primitiveList: joi.array().items(joi.string(), joi.number(), joi.boolean()),
     objectList: joi.array().items(listItem),
     level1Schema: joi

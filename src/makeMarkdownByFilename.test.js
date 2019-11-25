@@ -147,6 +147,38 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should support whitelisting valid values`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'string',
+              allow: ['valid1', 'valid2'],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
+    it(`should support blacklisting invalid values`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'string',
+              invalid: ['invalid1', 'invalid2'],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`negative: should throw when no name meta tag`, () => {
       const joiSchema = {
         describe: () => ({
