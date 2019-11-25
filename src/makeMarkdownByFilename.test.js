@@ -146,6 +146,30 @@ describe(`makeMarkdownByFilename`, () => {
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
+
+    it(`negative: should throw when no name meta tag`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ filename: 'test' }],
+        }),
+      };
+
+      expect(() => makeMarkdownByFilename(joiSchema)).toThrowError(
+        'Required name meta tag not provided.',
+      );
+    });
+
+    it(`negative: should throw when no filename meta tag`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test' }],
+        }),
+      };
+
+      expect(() => makeMarkdownByFilename(joiSchema)).toThrowError(
+        'Required filename meta tag not provided.',
+      );
+    });
   });
 
   describe(`integration`, () => {

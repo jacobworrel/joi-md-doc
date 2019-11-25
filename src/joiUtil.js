@@ -4,6 +4,14 @@ const primitiveList = ['string', 'number', 'boolean'];
 
 const ju = {};
 
+ju.throwWhenNil = msg =>
+  R.when(
+    R.isNil,
+    R.tap(() => {
+      throw new Error(msg);
+    }),
+  );
+
 ju.findMeta = x =>
   R.pipe(
     R.prop('metas'),

@@ -7,8 +7,14 @@ function makeMarkdownByFilename(rootSchema) {
   const markdownByFilename = {};
 
   const makeMarkdownWith = R.curry((path, schema) => {
-    const name = ju.findMeta('name')(schema);
-    const filename = ju.findMeta('filename')(schema);
+    const name = R.pipe(
+      ju.findMeta('name'),
+      ju.throwWhenNil('Required name meta tag not provided.'),
+    )(schema);
+    const filename = R.pipe(
+      ju.findMeta('filename'),
+      ju.throwWhenNil('Required filename meta tag not provided.'),
+    )(schema);
     const nextPath = R.append({ name, filename }, path);
 
     const json = R.pipe(
