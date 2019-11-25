@@ -1,3 +1,4 @@
+const joi = require('@hapi/joi');
 const makeMarkdownByFilename = require('./makeMarkdownByFilename');
 
 describe(`makeMarkdownByFilename`, () => {
@@ -144,6 +145,25 @@ describe(`makeMarkdownByFilename`, () => {
       };
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+  });
+
+  describe(`integration`, () => {
+    it(`should support appended schemas`, () => {
+      const baseSchema = joi.object().keys({
+        base: joi.boolean(),
+      });
+
+      const extendedSchema = baseSchema
+        .append({
+          extended: joi.boolean(),
+        })
+        .meta({
+          name: 'Extends from Base',
+          filename: 'extendedFromBase',
+        });
+
+      expect(makeMarkdownByFilename(extendedSchema)).toMatchSnapshot();
     });
   });
 });

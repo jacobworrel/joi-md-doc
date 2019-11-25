@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`makeMarkdownByFilename integration should support appended schemas 1`] = `
+Object {
+  "extendedFromBase": "# Extends from Base
+
+## base
+
+> \`boolean\` | Optional
+
+
+
+
+## extended
+
+> \`boolean\` | Optional
+
+
+
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should mark required fields 1`] = `
 Object {
   "test": "# Test
