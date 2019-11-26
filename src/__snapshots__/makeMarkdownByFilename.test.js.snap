@@ -8,15 +8,9 @@ Object {
 
 > \`boolean\` | optional
 
-
-
-
 ## extended
 
 > \`boolean\` | optional
-
-
-
 ",
 }
 `;
@@ -28,9 +22,6 @@ Object {
 ## foo
 
 > \`number\` | required
-
-
-
 ",
 }
 `;
@@ -42,9 +33,6 @@ Object {
 ## foo
 
 > \`string\` | optional
-
-
-
 
 
 blacklist: \`invalid1\`, \`invalid2\`
@@ -59,9 +47,6 @@ Object {
 ## foo
 
 > \`number\` | optional | defaults to \`1\`
-
-
-
 ",
 }
 `;
@@ -87,9 +72,6 @@ Object {
 ## stringList
 
 > \`array\`: \`string\` | optional
-
-
-
 ",
 }
 `;
@@ -101,9 +83,6 @@ Object {
 ## stringList
 
 > \`array\`: \`string\`, \`number\`, \`boolean\` | optional
-
-
-
 ",
 }
 `;
@@ -115,9 +94,6 @@ Object {
 ## foo
 
 > \`number\` | optional | min: \`0\` | max: \`5\`
-
-
-
 ",
 }
 `;
@@ -130,18 +106,12 @@ Object {
 ## listItemKey
 
 > \`string\` | optional
-
-
-
 ",
   "test": "# Test
 
 ## stringList
 
 > \`array\`: [List Item](./listItem.md) | optional
-
-
-
 ",
 }
 `;
@@ -154,18 +124,12 @@ Object {
 ## foo
 
 > \`number\` | optional
-
-
-
 ",
   "parent": "# Parent
 
 ## [foo](./child.md)
 
 > \`object\` | optional
-
-
-
 ",
 }
 `;
@@ -178,22 +142,13 @@ Object {
 
 > \`number\` | optional
 
-
-
-
 ## bar
 
 > \`string\` | optional
 
-
-
-
 ## baz
 
 > \`boolean\` | optional
-
-
-
 ",
 }
 `;
@@ -205,9 +160,6 @@ Object {
 ## foo
 
 > \`string\` | optional
-
-
-
 
 
 whitelist: \`valid1\`, \`valid2\`

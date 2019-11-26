@@ -60,8 +60,8 @@ ju.makeDefault = R.pipe(
 );
 ju.makeDescription = R.pipe(
   R.path(['flags', 'description']),
-  R.defaultTo(''),
-  mdu.makeParagraph,
+  R.defaultTo([]),
+  R.when(R.complement(R.isEmpty), R.pipe(mdu.makeParagraph, R.of)),
 );
 
 ju.isPrimitive = R.pipe(R.prop('type'), R.includes(R.__, primitiveList));
@@ -86,6 +86,7 @@ ju.makeRestrictionWith = R.curry((label, source) =>
 // PRIMITIVE TYPES
 ju.makePrimitiveField = R.curry((key, val) => {
   return R.pipe(
+    R.concat(R.__, ju.makeDescription(val)),
     R.concat(R.__, ju.makeRestrictionWith('whitelist', 'allow')(val)),
     R.concat(R.__, ju.makeRestrictionWith('blacklist', 'invalid')(val)),
   )([
@@ -97,14 +98,13 @@ ju.makePrimitiveField = R.curry((key, val) => {
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
     ]),
-    ju.makeDescription(val),
   ]);
 });
 
 // OBJECT TYPES
 ju.makeObjectField = R.curry((key, val) => {
   const filename = ju.findMeta('filename')(val);
-  return [
+  return R.pipe(R.concat(R.__, ju.makeDescription(val)))([
     R.pipe(mdu.makeLink, mdu.makeKeyTitle)({ name: key, filename }),
     ju.makeTypeDef([
       ju.makeType(val),
@@ -112,8 +112,7 @@ ju.makeObjectField = R.curry((key, val) => {
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
     ]),
-    ju.makeDescription(val),
-  ];
+  ]);
 });
 
 ju.makeTypeArrayItems = R.pipe(
@@ -138,7 +137,7 @@ ju.makeTypeArrayItems = R.pipe(
 // ARRAY TYPES
 ju.makeTypeArray = val => `${ju.makeType(val)}${ju.makeTypeArrayItems(val)}`;
 ju.makeArrayField = R.curry((key, val) => {
-  return [
+  return R.pipe(R.concat(R.__, ju.makeDescription(val)))([
     mdu.makeKeyTitle(key),
     ju.makeTypeDef([
       ju.makeTypeArray(val),
@@ -146,8 +145,7 @@ ju.makeArrayField = R.curry((key, val) => {
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
     ]),
-    ju.makeDescription(val),
-  ];
+  ]);
 });
 
 module.exports = ju;
