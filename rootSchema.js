@@ -26,7 +26,11 @@ module.exports = joi
         ...R.map(R.pipe(R.toString, R.concat('invalid')), R.range(0, 4)),
       ),
     bar: joi.boolean(),
-    primitiveList: joi.array().items(joi.string(), joi.number(), joi.boolean()),
+    primitiveList: joi
+      .array()
+      .items(joi.string(), joi.number(), joi.boolean())
+      .min(1)
+      .max(3),
     objectList: joi.array().items(listItem),
     nestedObjSchema1: joi
       .object()

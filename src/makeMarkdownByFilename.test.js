@@ -179,6 +179,35 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should support min and max`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'number',
+              rules: [
+                {
+                  name: 'min',
+                  args: {
+                    limit: 0,
+                  },
+                },
+                {
+                  name: 'max',
+                  args: {
+                    limit: 5,
+                  },
+                },
+              ],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`negative: should throw when no name meta tag`, () => {
       const joiSchema = {
         describe: () => ({

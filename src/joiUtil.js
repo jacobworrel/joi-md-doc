@@ -23,17 +23,40 @@ ju.findMeta = x =>
     R.prop(x),
   );
 
+ju.findRule = x =>
+  R.pipe(
+    R.prop('rules'),
+    R.defaultTo([]),
+    R.find(R.propEq('name', x)),
+    R.defaultTo({}),
+  );
+
+ju.makeLimit = x =>
+  R.pipe(
+    R.pipe(ju.findRule(x), R.path(['args', 'limit'])),
+    R.ifElse(
+      R.isNil,
+      R.always(''),
+      R.pipe(mdu.wrapInBackticks, R.concat(`${x}: `)),
+    ),
+  );
+
 ju.makeTypeDef = R.pipe(
   R.reject(R.either(R.isEmpty, R.isNil)),
   R.join(' | '),
   R.objOf('blockquote'),
 );
-ju.makeType = x => mdu.wrapInBackticks(x);
-ju.makeRequiredOrOptional = isRequired =>
-  `${isRequired ? 'Required' : 'Optional'}`;
-ju.makeDefault = R.when(
-  R.complement(R.isNil),
-  R.pipe(mdu.wrapInBackticks, R.concat('Default: ')),
+ju.makeType = R.pipe(R.prop('type'), mdu.wrapInBackticks);
+ju.makeRequiredOrOptional = R.pipe(
+  R.path(['flags', 'presence']),
+  R.ifElse(R.equals('required'), R.always('Required'), R.always('Optional')),
+);
+ju.makeDefault = R.pipe(
+  ju.findMeta('default'),
+  R.when(
+    R.complement(R.isNil),
+    R.pipe(mdu.wrapInBackticks, R.concat('Default: ')),
+  ),
 );
 
 ju.isPrimitive = R.pipe(R.prop('type'), R.includes(R.__, primitiveList));
@@ -48,14 +71,7 @@ ju.makeValueList = R.pipe(R.map(mdu.wrapInBackticks), R.join(', '));
 
 // PRIMITIVE TYPES
 ju.makePrimitiveField = R.curry((key, val) => {
-  const {
-    type,
-    allow = [],
-    invalid = [],
-    flags: { presence = 'optional', description = '' } = {},
-  } = val;
-  const isRequired = R.equals(presence, 'required');
-  const defaultVal = ju.findMeta('default')(val);
+  const { allow = [], invalid = [], flags: { description = '' } = {} } = val;
   return R.pipe(
     R.when(
       () => ju.shouldHaveValueList(allow),
@@ -68,9 +84,11 @@ ju.makePrimitiveField = R.curry((key, val) => {
   )([
     mdu.makeKeyTitle(key),
     ju.makeTypeDef([
-      ju.makeType(type),
-      ju.makeRequiredOrOptional(isRequired),
-      ju.makeDefault(defaultVal),
+      ju.makeType(val),
+      ju.makeRequiredOrOptional(val),
+      ju.makeDefault(val),
+      ju.makeLimit('min')(val),
+      ju.makeLimit('max')(val),
     ]),
     mdu.makeParagraph(description),
   ]);
@@ -78,29 +96,29 @@ ju.makePrimitiveField = R.curry((key, val) => {
 
 // OBJECT TYPES
 ju.makeObjectField = R.curry((key, val) => {
-  const { type, flags: { presence = 'optional', description = '' } = {} } = val;
-  const isRequired = R.equals(presence, 'required');
+  const { flags: { description = '' } = {} } = val;
   const filename = ju.findMeta('filename')(val);
   return [
     R.pipe(mdu.makeLink, mdu.makeKeyTitle)({ name: key, filename }),
-    ju.makeTypeDef([ju.makeType(type), ju.makeRequiredOrOptional(isRequired)]),
+    ju.makeTypeDef([
+      ju.makeType(val),
+      ju.makeRequiredOrOptional(val),
+      ju.makeLimit('min')(val),
+      ju.makeLimit('max')(val),
+    ]),
     mdu.makeParagraph(description),
   ];
 });
 
 // ARRAY TYPES
 ju.makeArrayField = R.curry((key, val) => {
-  const {
-    type,
-    items,
-    flags: { presence = 'optional', description = '' } = {},
-  } = val;
+  const { items, flags: { description = '' } = {} } = val;
 
   const typeList = R.pipe(
     R.map(
       R.ifElse(
         ju.isPrimitive,
-        R.pipe(R.prop('type'), mdu.wrapInBackticks),
+        ju.makeType,
         R.pipe(x =>
           mdu.makeLink({
             name: ju.findMeta('name')(x),
@@ -110,12 +128,13 @@ ju.makeArrayField = R.curry((key, val) => {
       ),
     ),
   )(items);
-  const isRequired = R.equals(presence, 'required');
   return [
     mdu.makeKeyTitle(key),
     ju.makeTypeDef([
-      `${ju.makeType(type)}: ${typeList}`,
-      ju.makeRequiredOrOptional(isRequired),
+      `${ju.makeType(val)}: ${typeList}`,
+      ju.makeRequiredOrOptional(val),
+      ju.makeLimit('min')(val),
+      ju.makeLimit('max')(val),
     ]),
     mdu.makeParagraph(description),
   ];

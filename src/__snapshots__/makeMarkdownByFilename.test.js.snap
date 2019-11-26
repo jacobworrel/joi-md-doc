@@ -108,6 +108,20 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support min and max 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`number\` | Optional | min: \`0\` | max: \`5\`
+
+
+
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support nested list of single schema/object type 1`] = `
 Object {
   "listItem": "[Test](./test.md)
