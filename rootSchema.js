@@ -25,6 +25,7 @@ module.exports = joi
       .invalid(
         ...R.map(R.pipe(R.toString, R.concat('invalid')), R.range(0, 4)),
       ),
+    bar: joi.boolean(),
     primitiveList: joi.array().items(joi.string(), joi.number(), joi.boolean()),
     objectList: joi.array().items(listItem),
     nestedObjSchema1: joi
