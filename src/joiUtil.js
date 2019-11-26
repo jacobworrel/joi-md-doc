@@ -97,6 +97,7 @@ ju.makePrimitiveField = R.curry((key, val) => {
       ju.makeDefault(val),
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
+      ju.makeLimit('length')(val),
     ]),
   ]);
 });
@@ -111,6 +112,7 @@ ju.makeObjectField = R.curry((key, val) => {
       ju.makeRequiredOrOptional(val),
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
+      ju.makeLimit('length')(val),
     ]),
   ]);
 });
@@ -144,6 +146,7 @@ ju.makeArrayField = R.curry((key, val) => {
       ju.makeRequiredOrOptional(val),
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
+      ju.makeLimit('length')(val),
     ]),
   ]);
 });

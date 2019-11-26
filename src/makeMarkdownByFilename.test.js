@@ -208,6 +208,29 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should support length`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'array',
+              rules: [
+                {
+                  name: 'length',
+                  args: {
+                    limit: 1,
+                  },
+                },
+              ],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`negative: should throw when no name meta tag`, () => {
       const joiSchema = {
         describe: () => ({

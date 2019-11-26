@@ -65,6 +65,17 @@ This is a description.
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support length 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`array\` | optional | length: \`1\`
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support list of single primitive type 1`] = `
 Object {
   "test": "# Test
