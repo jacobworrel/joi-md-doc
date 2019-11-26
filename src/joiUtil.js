@@ -69,14 +69,20 @@ ju.shouldHaveValueList = R.both(
 );
 ju.makeValueList = R.pipe(R.map(mdu.wrapInBackticks), R.join(', '));
 
+ju.makeWhitelist = R.pipe(
+  R.prop('allow'),
+  R.defaultTo([]),
+  R.when(
+    ju.shouldHaveValueList,
+    R.pipe(ju.makeValueList, R.concat('Whitelist: '), mdu.makeParagraph, R.of),
+  ),
+);
+
 // PRIMITIVE TYPES
 ju.makePrimitiveField = R.curry((key, val) => {
-  const { allow = [], invalid = [], flags: { description = '' } = {} } = val;
+  const { invalid = [], flags: { description = '' } = {} } = val;
   return R.pipe(
-    R.when(
-      () => ju.shouldHaveValueList(allow),
-      R.append(mdu.makeParagraph(`Whitelist: ${ju.makeValueList(allow)}`)),
-    ),
+    R.concat(R.__, ju.makeWhitelist(val)),
     R.when(
       () => ju.shouldHaveValueList(invalid),
       R.append(mdu.makeParagraph(`Blacklist: ${ju.makeValueList(invalid)}`)),
@@ -110,28 +116,31 @@ ju.makeObjectField = R.curry((key, val) => {
   ];
 });
 
-// ARRAY TYPES
-ju.makeArrayField = R.curry((key, val) => {
-  const { items, flags: { description = '' } = {} } = val;
-
-  const typeList = R.pipe(
-    R.map(
-      R.ifElse(
-        ju.isPrimitive,
-        ju.makeType,
-        R.pipe(x =>
-          mdu.makeLink({
-            name: ju.findMeta('name')(x),
-            filename: ju.findMeta('filename')(x),
-          }),
-        ),
+ju.makeTypeArrayItems = R.pipe(
+  R.prop('items'),
+  R.defaultTo([]),
+  R.map(
+    R.ifElse(
+      ju.isPrimitive,
+      ju.makeType,
+      R.pipe(x =>
+        mdu.makeLink({
+          name: ju.findMeta('name')(x),
+          filename: ju.findMeta('filename')(x),
+        }),
       ),
     ),
-  )(items);
+  ),
+);
+
+// ARRAY TYPES
+ju.makeTypeArray = val => `${ju.makeType(val)}: ${ju.makeTypeArrayItems(val)}`;
+ju.makeArrayField = R.curry((key, val) => {
+  const { flags: { description = '' } = {} } = val;
   return [
     mdu.makeKeyTitle(key),
     ju.makeTypeDef([
-      `${ju.makeType(val)}: ${typeList}`,
+      ju.makeTypeArray(val),
       ju.makeRequiredOrOptional(val),
       ju.makeLimit('min')(val),
       ju.makeLimit('max')(val),
