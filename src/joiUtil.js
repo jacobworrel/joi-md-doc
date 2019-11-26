@@ -49,13 +49,13 @@ ju.makeTypeDef = R.pipe(
 ju.makeType = R.pipe(R.prop('type'), mdu.wrapInBackticks);
 ju.makeRequiredOrOptional = R.pipe(
   R.path(['flags', 'presence']),
-  R.ifElse(R.equals('required'), R.always('Required'), R.always('Optional')),
+  R.ifElse(R.equals('required'), R.always('required'), R.always('optional')),
 );
 ju.makeDefault = R.pipe(
   ju.findMeta('default'),
   R.when(
     R.complement(R.isNil),
-    R.pipe(mdu.wrapInBackticks, R.concat('Default: ')),
+    R.pipe(mdu.wrapInBackticks, R.concat('defaults to ')),
   ),
 );
 ju.makeDescription = R.pipe(
@@ -86,8 +86,8 @@ ju.makeRestrictionWith = R.curry((label, source) =>
 // PRIMITIVE TYPES
 ju.makePrimitiveField = R.curry((key, val) => {
   return R.pipe(
-    R.concat(R.__, ju.makeRestrictionWith('Whitelist', 'allow')(val)),
-    R.concat(R.__, ju.makeRestrictionWith('Blacklist', 'invalid')(val)),
+    R.concat(R.__, ju.makeRestrictionWith('whitelist', 'allow')(val)),
+    R.concat(R.__, ju.makeRestrictionWith('blacklist', 'invalid')(val)),
   )([
     mdu.makeKeyTitle(key),
     ju.makeTypeDef([
@@ -131,10 +131,12 @@ ju.makeTypeArrayItems = R.pipe(
       ),
     ),
   ),
+  R.join(', '),
+  R.when(R.complement(R.isEmpty), R.concat(': ')),
 );
 
 // ARRAY TYPES
-ju.makeTypeArray = val => `${ju.makeType(val)}: ${ju.makeTypeArrayItems(val)}`;
+ju.makeTypeArray = val => `${ju.makeType(val)}${ju.makeTypeArrayItems(val)}`;
 ju.makeArrayField = R.curry((key, val) => {
   return [
     mdu.makeKeyTitle(key),

@@ -6,14 +6,14 @@ Object {
 
 ## base
 
-> \`boolean\` | Optional
+> \`boolean\` | optional
 
 
 
 
 ## extended
 
-> \`boolean\` | Optional
+> \`boolean\` | optional
 
 
 
@@ -27,7 +27,7 @@ Object {
 
 ## foo
 
-> \`number\` | Required
+> \`number\` | required
 
 
 
@@ -41,13 +41,13 @@ Object {
 
 ## foo
 
-> \`string\` | Optional
+> \`string\` | optional
 
 
 
 
 
-Blacklist: \`invalid1\`, \`invalid2\`
+blacklist: \`invalid1\`, \`invalid2\`
 ",
 }
 `;
@@ -58,7 +58,7 @@ Object {
 
 ## foo
 
-> \`number\` | Optional | Default: \`1\`
+> \`number\` | optional | defaults to \`1\`
 
 
 
@@ -72,7 +72,7 @@ Object {
 
 ## foo
 
-> \`number\` | Optional
+> \`number\` | optional
 
 
 This is a description.
@@ -86,7 +86,7 @@ Object {
 
 ## stringList
 
-> \`array\`: \`string\` | Optional
+> \`array\`: \`string\` | optional
 
 
 
@@ -100,7 +100,7 @@ Object {
 
 ## stringList
 
-> \`array\`: \`string\`,\`number\`,\`boolean\` | Optional
+> \`array\`: \`string\`, \`number\`, \`boolean\` | optional
 
 
 
@@ -114,7 +114,7 @@ Object {
 
 ## foo
 
-> \`number\` | Optional | min: \`0\` | max: \`5\`
+> \`number\` | optional | min: \`0\` | max: \`5\`
 
 
 
@@ -129,7 +129,7 @@ Object {
 
 ## listItemKey
 
-> \`string\` | Optional
+> \`string\` | optional
 
 
 
@@ -138,7 +138,7 @@ Object {
 
 ## stringList
 
-> \`array\`: [List Item](./listItem.md) | Optional
+> \`array\`: [List Item](./listItem.md) | optional
 
 
 
@@ -153,7 +153,7 @@ Object {
 
 ## foo
 
-> \`number\` | Optional
+> \`number\` | optional
 
 
 
@@ -162,7 +162,7 @@ Object {
 
 ## [foo](./child.md)
 
-> \`object\` | Optional
+> \`object\` | optional
 
 
 
@@ -176,21 +176,21 @@ Object {
 
 ## foo
 
-> \`number\` | Optional
+> \`number\` | optional
 
 
 
 
 ## bar
 
-> \`string\` | Optional
+> \`string\` | optional
 
 
 
 
 ## baz
 
-> \`boolean\` | Optional
+> \`boolean\` | optional
 
 
 
@@ -204,13 +204,13 @@ Object {
 
 ## foo
 
-> \`string\` | Optional
+> \`string\` | optional
 
 
 
 
 
-Whitelist: \`valid1\`, \`valid2\`
+whitelist: \`valid1\`, \`valid2\`
 ",
 }
 `;
