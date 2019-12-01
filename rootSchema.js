@@ -29,6 +29,7 @@ module.exports = joi
       then: joi.boolean(),
       otherwise: joi.forbidden(),
     }),
+    any: joi.any(),
     list: joi.array().length(5),
     primitiveList: joi
       .array()

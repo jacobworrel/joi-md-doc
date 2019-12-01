@@ -1,6 +1,6 @@
 const R = require('ramda');
 const mdu = require('./markdownUtil');
-const primitiveList = ['string', 'number', 'boolean'];
+const primitiveList = ['string', 'number', 'boolean', 'any'];
 
 const maxValueListLength = 5;
 
@@ -46,7 +46,11 @@ ju.makeTypeDef = R.pipe(
   R.join(' | '),
   R.objOf('blockquote'),
 );
-ju.makeType = R.pipe(R.prop('type'), mdu.wrapInBackticks);
+ju.makeType = R.pipe(
+  R.prop('type'),
+  R.when(R.equals('any'), R.always('*')),
+  mdu.wrapInBackticks,
+);
 ju.makeRequiredOrOptional = R.pipe(
   R.path(['flags', 'presence']),
   R.ifElse(R.equals('required'), R.always('required'), R.always('optional')),

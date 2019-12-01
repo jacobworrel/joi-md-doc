@@ -26,6 +26,17 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support "any" types 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`*\` | optional
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support blacklisting invalid values 1`] = `
 Object {
   "test": "# Test
@@ -178,7 +189,7 @@ whitelist: \`valid1\`, \`valid2\`
 }
 `;
 
-exports[`makeMarkdownByFilename unit should use then branch when alternatives type 1`] = `
+exports[`makeMarkdownByFilename unit should use "then" branch when "alternatives" type 1`] = `
 Object {
   "test": "# Test
 

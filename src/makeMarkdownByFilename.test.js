@@ -253,6 +253,21 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should support "any" types`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'any',
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`negative: should throw when no name meta tag`, () => {
       const joiSchema = {
         describe: () => ({
