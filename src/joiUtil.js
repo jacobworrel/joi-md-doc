@@ -67,6 +67,7 @@ ju.makeDescription = R.pipe(
 ju.isPrimitive = R.pipe(R.prop('type'), R.includes(R.__, primitiveList));
 ju.isObject = R.pipe(R.prop('type'), R.equals('object'));
 ju.isArray = R.pipe(R.prop('type'), R.equals('array'));
+ju.isAlternative = R.pipe(R.prop('type'), R.equals('alternatives'));
 
 ju.makeValueList = R.pipe(R.map(mdu.wrapInBackticks), R.join(', '));
 ju.makeRestrictionWith = R.curry((label, source) =>

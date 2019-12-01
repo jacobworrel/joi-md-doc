@@ -24,7 +24,11 @@ module.exports = joi
       .valid(...R.map(R.pipe(R.toString, R.concat('valid')), R.range(0, 4)))
       .invalid(...R.map(R.pipe(R.toString, R.concat('invalid')), R.range(0, 4)))
       .description('This is a description.'),
-    bar: joi.boolean(),
+    bar: joi.alternatives().conditional('foo', {
+      is: joi.required(),
+      then: joi.boolean(),
+      otherwise: joi.forbidden(),
+    }),
     list: joi.array().length(5),
     primitiveList: joi
       .array()

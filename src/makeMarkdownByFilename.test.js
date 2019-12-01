@@ -231,6 +231,28 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should use "then" branch when "alternatives" type`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'alternatives',
+              matches: [
+                {
+                  then: {
+                    type: 'string',
+                  },
+                },
+              ],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`negative: should throw when no name meta tag`, () => {
       const joiSchema = {
         describe: () => ({

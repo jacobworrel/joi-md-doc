@@ -177,3 +177,14 @@ whitelist: \`valid1\`, \`valid2\`
 ",
 }
 `;
+
+exports[`makeMarkdownByFilename unit should use then branch when alternatives type 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`string\` | optional
+",
+}
+`;

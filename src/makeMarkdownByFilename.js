@@ -20,26 +20,33 @@ function makeMarkdownByFilename(rootSchema) {
     const json = R.pipe(
       R.prop('keys'),
       R.mapObjIndexed((val, key) =>
-        R.cond([
-          [ju.isPrimitive, ju.makePrimitiveField(key)],
-          [
-            ju.isObject,
-            R.pipe(R.tap(makeMarkdownWith(nextPath)), ju.makeObjectField(key)),
-          ],
-          [
-            ju.isArray,
-            R.pipe(
-              R.tap(
-                R.pipe(
-                  R.propOr([], 'items'),
-                  R.forEach(R.when(ju.isObject, makeMarkdownWith(nextPath))),
-                ),
+        R.pipe(
+          // temporary hack until i figure out a proper way to handle alternives type
+          R.when(ju.isAlternative, R.path(['matches', 0, 'then'])),
+          R.cond([
+            [ju.isPrimitive, ju.makePrimitiveField(key)],
+            [
+              ju.isObject,
+              R.pipe(
+                R.tap(makeMarkdownWith(nextPath)),
+                ju.makeObjectField(key),
               ),
-              ju.makeArrayField(key),
-            ),
-          ],
-          [R.T, R.identity],
-        ])(val),
+            ],
+            [
+              ju.isArray,
+              R.pipe(
+                R.tap(
+                  R.pipe(
+                    R.propOr([], 'items'),
+                    R.forEach(R.when(ju.isObject, makeMarkdownWith(nextPath))),
+                  ),
+                ),
+                ju.makeArrayField(key),
+              ),
+            ],
+            [R.T, R.identity],
+          ]),
+        )(val),
       ),
       R.values,
       R.prepend(mdu.makeSchemaTitle(name)),
