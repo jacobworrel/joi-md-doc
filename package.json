@@ -2,13 +2,13 @@
   "name": "joi-doc-gen",
   "version": "0.0.0",
   "description": "",
-  "main": "src/makeMarkdownByFilename.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .js",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:cover": "jest --coverage",
-    "start": "node makeJoiDoc.js"
+    "start": "node ./example/script.js"
   },
   "repository": {
     "type": "git",
