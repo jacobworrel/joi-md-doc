@@ -35,9 +35,9 @@ makeMarkdownDoc(schema);
 
 ## API
 
-#### makeMarkdownDoc(joiSchema[, options])
+### makeMarkdownDoc(joiSchema[, options])
 
-#### makeMarkdownByFilename(joiSchema)
+### makeMarkdownByFilename(joiSchema)
 
 ## Example
 
