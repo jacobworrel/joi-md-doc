@@ -1,8 +1,14 @@
-# joi-doc-gen
+# joi-md-doc
 
-Generate markdown documentation files from @hapi/joi schemas.
+Generate markdown documentation files from [@hapi/joi](https://github.com/hapijs/joi) schemas.
 
-## Installation and Usage
+## Installation
+
+```markdown
+npm i --save-dev joi-md-doc
+```
+
+## Usage
 
 ```javascript
 const joi = require('@hapi/joi');
@@ -27,19 +33,12 @@ const schema = joi
 makeMarkdownDoc(schema);
 ```
 
-# My Schema
+## API
 
-## version
+#### makeMarkdownDoc(joiSchema[, options])
 
-> `number` | optional | defaults to `1.0.0`
+#### makeMarkdownByFilename(joiSchema)
 
+## Example
 
-Follows semantic versioning.
-
-## any
-
-> `*` | optional
-
-## primitiveList
-
-> `array`: `string`, `number`, `boolean` | optional | min: `1` | max: `3`
+Check out the [example joi schema](./example/rootSchema.js) and [generated markdown](./example/doc/rootSchema.md) for currently supported joi validations.
