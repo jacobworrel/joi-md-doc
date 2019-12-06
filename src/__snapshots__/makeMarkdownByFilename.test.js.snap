@@ -26,6 +26,28 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should not show blacklist when list length >= maxValueListLength 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`string\` | optional
+",
+}
+`;
+
+exports[`makeMarkdownByFilename unit should not show whitelist when list length >= maxValueListLength 1`] = `
+Object {
+  "test": "# Test
+
+## foo
+
+> \`string\` | optional
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support "any" types 1`] = `
 Object {
   "test": "# Test

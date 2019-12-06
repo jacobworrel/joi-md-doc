@@ -2,9 +2,9 @@ const R = require('ramda');
 const mdu = require('./markdownUtil');
 const primitiveList = ['string', 'number', 'boolean', 'any'];
 
-const maxValueListLength = 5;
-
 const ju = {};
+
+ju.maxValueListLength = 5;
 
 ju.throwWhenNil = msg =>
   R.when(
@@ -78,12 +78,13 @@ ju.makeRestrictionWith = R.curry((label, source) =>
   R.pipe(
     R.prop(source),
     R.defaultTo([]),
-    R.when(
+    R.ifElse(
       R.both(
-        R.pipe(R.length, R.lte(R.__, maxValueListLength)),
+        R.pipe(R.length, R.lte(R.__, ju.maxValueListLength)),
         R.complement(R.isEmpty),
       ),
       R.pipe(ju.makeValueList, R.concat(`${label}: `), mdu.makeParagraph, R.of),
+      R.always([]),
     ),
   ),
 );

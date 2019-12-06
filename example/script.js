@@ -2,7 +2,7 @@ const rootSchema = require('./rootSchema');
 const { makeMarkdownDoc } = require('./../index');
 // const joi = require('@hapi/joi');
 
-// todo figure out how to get path to project root
+// console.log(JSON.stringify(rootSchema.describe(), null, 2));
 
 // const schema = joi
 //   .object()

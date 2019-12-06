@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi');
 const makeMarkdownByFilename = require('./makeMarkdownByFilename');
+const R = require('ramda');
 
 describe(`makeMarkdownByFilename`, () => {
   describe(`unit`, () => {
@@ -163,6 +164,22 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should not show whitelist when list length >= maxValueListLength`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'string',
+              allow: R.range(0, 100),
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`should support blacklisting invalid values`, () => {
       const joiSchema = {
         describe: () => ({
@@ -171,6 +188,22 @@ describe(`makeMarkdownByFilename`, () => {
             foo: {
               type: 'string',
               invalid: ['invalid1', 'invalid2'],
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
+    it(`should not show blacklist when list length >= maxValueListLength`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            foo: {
+              type: 'string',
+              invalid: R.range(0, 100),
             },
           },
         }),
