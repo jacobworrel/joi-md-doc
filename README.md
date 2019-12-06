@@ -12,7 +12,7 @@ npm i --save-dev joi-md-doc
 
 ```javascript
 const joi = require('@hapi/joi');
-const { makeMarkdownDoc } = require('joi-doc-gen');
+const { makeMarkdownDoc } = require('joi-md-doc');
 
 const schema = joi
   .object()

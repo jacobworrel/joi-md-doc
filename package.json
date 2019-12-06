@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jacobworrel/joi-doc-gen.git"
+    "url": "git+https://github.com/jacobworrel/joi-md-doc.git"
   },
   "author": "Jacob Worrel",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jacobworrel/joi-doc-gen/issues"
+    "url": "https://github.com/jacobworrel/joi-md-doc/issues"
   },
-  "homepage": "https://github.com/jacobworrel/joi-doc-gen#readme",
+  "homepage": "https://github.com/jacobworrel/joi-md-doc#readme",
   "dependencies": {
     "json2md": "^1.6.5",
     "mkdirp": "^0.5.1",
