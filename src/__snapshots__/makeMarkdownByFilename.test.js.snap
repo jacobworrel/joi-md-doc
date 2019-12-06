@@ -15,6 +15,17 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should default name to filename 1`] = `
+Object {
+  "test": "# test
+
+## foo
+
+> \`number\` | optional
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should mark required fields 1`] = `
 Object {
   "test": "# Test

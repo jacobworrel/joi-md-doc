@@ -301,18 +301,6 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
-    it(`negative: should throw when no name meta tag`, () => {
-      const joiSchema = {
-        describe: () => ({
-          metas: [{ filename: 'test' }],
-        }),
-      };
-
-      expect(() => makeMarkdownByFilename(joiSchema)).toThrowError(
-        'Required name meta tag not provided.',
-      );
-    });
-
     it(`negative: should throw when no filename meta tag`, () => {
       const joiSchema = {
         describe: () => ({
@@ -323,6 +311,19 @@ describe(`makeMarkdownByFilename`, () => {
       expect(() => makeMarkdownByFilename(joiSchema)).toThrowError(
         'Required filename meta tag not provided.',
       );
+    });
+
+    it(`should default name to filename`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ filename: 'test' }],
+          keys: {
+            foo: { type: 'number' },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
   });
 
