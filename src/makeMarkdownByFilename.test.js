@@ -38,6 +38,25 @@ describe(`makeMarkdownByFilename`, () => {
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
 
+    it(`should support nested schemas/objects with no name meta tag`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ filename: 'parent' }],
+          keys: {
+            foo: {
+              type: 'object',
+              metas: [{ filename: 'child' }],
+              keys: {
+                foo: { type: 'number' },
+              },
+            },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
+
     it(`should support list of single primitive type`, () => {
       const joiSchema = {
         describe: () => ({

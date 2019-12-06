@@ -130,12 +130,13 @@ ju.makeTypeArrayItems = R.pipe(
     R.ifElse(
       ju.isPrimitive,
       ju.makeType,
-      R.pipe(x =>
-        mdu.makeLink({
-          name: ju.findMeta('name')(x),
-          filename: ju.findMeta('filename')(x),
-        }),
-      ),
+      R.pipe(x => {
+        const filename = ju.findMeta('filename')(x);
+        return mdu.makeLink({
+          name: R.defaultTo(filename, ju.findMeta('name')(x)),
+          filename,
+        });
+      }),
     ),
   ),
   R.join(', '),

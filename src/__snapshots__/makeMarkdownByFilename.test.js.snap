@@ -189,6 +189,24 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support nested schemas/objects with no name meta tag 1`] = `
+Object {
+  "child": "[parent](./parent.md)
+# child
+
+## foo
+
+> \`number\` | optional
+",
+  "parent": "# parent
+
+## [foo](./child.md)
+
+> \`object\` | optional
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support primitive type 1`] = `
 Object {
   "test": "# Test
