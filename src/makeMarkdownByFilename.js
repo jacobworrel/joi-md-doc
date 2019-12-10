@@ -16,6 +16,7 @@ function makeMarkdownByFilename(rootSchema) {
 
     const json = R.pipe(
       R.prop('keys'),
+      R.reject(R.pipe(ju.findMeta('isDocumented'), R.equals(false))),
       R.mapObjIndexed((val, key) =>
         R.pipe(
           // temporary hack until i figure out a proper way to handle alternives type

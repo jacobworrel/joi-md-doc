@@ -344,6 +344,20 @@ describe(`makeMarkdownByFilename`, () => {
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
+
+    it(`should exclude key when isDocumented meta tag is false`, () => {
+      const joiSchema = {
+        describe: () => ({
+          metas: [{ name: 'Test', filename: 'test' }],
+          keys: {
+            included: { type: 'string' },
+            excluded: { type: 'string', metas: [{ isDocumented: false }] },
+          },
+        }),
+      };
+
+      expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
+    });
   });
 
   describe(`integration`, () => {

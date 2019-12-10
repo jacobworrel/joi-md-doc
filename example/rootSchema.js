@@ -1,6 +1,10 @@
 const joi = require('@hapi/joi');
 const R = require('ramda');
 
+const base = joi
+  .object()
+  .keys({ quux: joi.string().meta({ isDocumented: false }) });
+
 const listItem = joi
   .object()
   .keys({
@@ -11,9 +15,8 @@ const listItem = joi
     filename: 'listItemSchema',
   });
 
-module.exports = joi
-  .object()
-  .keys({
+module.exports = base
+  .append({
     version: joi
       .number()
       .meta({ default: '1.0.0' })

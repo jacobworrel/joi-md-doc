@@ -26,6 +26,17 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should exclude key when isDocumented meta tag is false 1`] = `
+Object {
+  "test": "# Test
+
+## included
+
+> \`string\` | optional
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should mark required fields 1`] = `
 Object {
   "test": "# Test
