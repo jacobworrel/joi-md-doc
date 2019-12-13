@@ -30,8 +30,13 @@ const schema = joi
   })
   .meta({ name: 'My Schema', filename: 'mySchema' });
 
-makeMarkdownDoc(schema);
+const options = {
+  outputPath: './doc',
+};
+makeMarkdownDoc(schema, options);
 ```
+
+This package relies on joi's [description](https://hapi.dev/family/joi/?v=16.1.8#anydescriptiondesc) and [meta](https://hapi.dev/family/joi/?v=16.1.8#anymetameta) methods to generate formatted markdown documentation files, so you'll need to annotate your joi schemas with descriptions and [custom meta tags](#custom-meta-tags) to take full advantage of the API.
 
 ## API
 
@@ -40,10 +45,17 @@ makeMarkdownDoc(schema);
 
 Traverses a root joi object schema and generates a markdown documentation file of every nested object schema in the tree.
 
+#### options
+
+##### outputPath
+> `string` | optional | defaults to `./doc/`
+
+The path to the directory where the markdown files get written to.
+
 ### makeMarkdownByFilename(joiSchema)
 `JoiSchema → {String: String}`
 
-### Meta Tags
+### Custom Meta Tags
 
 #### filename
 > `string` | required
