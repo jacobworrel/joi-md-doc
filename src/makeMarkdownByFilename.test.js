@@ -358,6 +358,23 @@ describe(`makeMarkdownByFilename`, () => {
 
       expect(makeMarkdownByFilename(joiSchema)).toMatchSnapshot();
     });
+
+    it(`should support array only schemas`, () => {
+      const schema = joi
+        .array()
+        .items({
+          requiredString: joi.string().required(),
+          optionalString: joi.string().optional(),
+          optionalBoolean: joi
+            .boolean()
+            .optional()
+            .description('Description of property'),
+        })
+        .min(1)
+        .meta({ name: 'Test', filename: 'test' });
+
+      expect(makeMarkdownByFilename(schema)).toMatchSnapshot();
+    });
   });
 
   describe(`integration`, () => {

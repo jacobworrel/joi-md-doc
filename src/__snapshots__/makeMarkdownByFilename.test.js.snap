@@ -81,6 +81,30 @@ Object {
 }
 `;
 
+exports[`makeMarkdownByFilename unit should support array only schemas 1`] = `
+Object {
+  "test": "# Test
+
+> \`array\` | optional | min: \`1\`
+
+## requiredString
+
+> \`string\` | required
+
+## optionalString
+
+> \`string\` | optional
+
+## optionalBoolean
+
+> \`boolean\` | optional
+
+
+Description of property
+",
+}
+`;
+
 exports[`makeMarkdownByFilename unit should support blacklisting invalid values 1`] = `
 Object {
   "test": "# Test
