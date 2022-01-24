@@ -157,5 +157,16 @@ ju.makeArrayField = R.curry((key, val) => {
     ]),
   ]);
 });
+ju.makeArrayFieldFromRoot = R.curry(val => {
+  return R.pipe(R.concat(R.__, ju.makeDescription(val)))([
+    ju.makeTypeDef([
+      ju.makeType(val),
+      ju.makeRequiredOrOptional(val),
+      ju.makeLimit('min')(val),
+      ju.makeLimit('max')(val),
+      ju.makeLimit('length')(val),
+    ]),
+  ]);
+});
 
 module.exports = ju;
